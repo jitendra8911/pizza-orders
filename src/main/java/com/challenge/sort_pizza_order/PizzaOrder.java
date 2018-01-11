@@ -2,9 +2,14 @@ package com.challenge.sort_pizza_order;
 
 
 import com.challenge.entity.Order;
+import com.challenge.storage.StorageProperties;
+import com.challenge.storage.StorageService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import com.challenge.bootstrap.BootstrapEntity;
 
@@ -17,6 +22,9 @@ import java.util.List;
 
 @ComponentScan("com.challenge.bootstrap")
 @ComponentScan("com.challenge.utility")
+@ComponentScan("com.challenge.storage")
+@ComponentScan("com.challenge.controller")
+@EnableConfigurationProperties(StorageProperties.class)
 public class PizzaOrder {
 	
 	public static void main(String[] args) throws ClassNotFoundException {
@@ -33,6 +41,14 @@ public class PizzaOrder {
 		OrdersUtility ordersUtility = ctx.getBean(OrdersUtility.class);
 		ordersUtility.writeOrders(args[1], sortedOrders);
 		
-	  }	
+	  }
+
+	@Bean
+	CommandLineRunner init(StorageService storageService) {
+		return (args) -> {
+			storageService.deleteAll();
+			storageService.init();
+		};
+	}
 	}
 
