@@ -1,8 +1,10 @@
 package com.challenge.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import com.challenge.entity.Order;
 import com.challenge.storage.StorageFileNotFoundException;
 import com.challenge.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,12 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
+    @Autowired
+    private com.challenge.utility.OrdersUtility ordersUtility;
+
+    @Autowired
+    private com.challenge.utility.SortUtility sortUtility;
+
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
@@ -53,14 +61,20 @@ public class FileUploadController {
     }
 
     @PostMapping("/")
-    public void handleFileUpload(@RequestParam("file") MultipartFile file,
+    public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
 
         storageService.store(file);
+        String inputFileName = storageService.load(file.getOriginalFilename()).toFile().getAbsolutePath();
+        List<Order> orderList = ordersUtility.readOrders(inputFileName);
+        List<Order> sortedOrders = sortUtility.sortOrders(orderList);
+        ordersUtility.writeOrders(inputFileName + "-sorted", sortedOrders);
+
+
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
 
-        //return "redirect:/";
+        return "redirect:/";
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
