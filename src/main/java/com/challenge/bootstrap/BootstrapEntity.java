@@ -1,9 +1,12 @@
 package com.challenge.bootstrap;
 
+import com.challenge.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.challenge.utility.OrdersUtility;
+
+import java.util.List;
 
 @Component
 public class BootstrapEntity {
@@ -11,7 +14,7 @@ public class BootstrapEntity {
 	@Autowired
 	private OrdersUtility OrdersUtility; 
 	
-	public void bootStrapOrders(String inputFileName) {
-		OrdersUtility.readOrders(inputFileName);
+	public List<Order> bootStrapOrders(String inputFileName) {
+		return OrdersUtility.readOrders(inputFileName);
 	}
 }

@@ -1,4 +1,4 @@
-package com.challenge.Entity;
+package com.challenge.entity;
 
 
 public class Order {

@@ -6,26 +6,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.challenge.Entity.Order;
-import com.challenge.sort_pizza_order.PizzaOrder;
+import com.challenge.entity.Order;
 
 @Component
 public class OrdersUtility {
 	
-	@Resource(name="inputOrders")
-	private List<Order> inputorders;
-	
-	@Resource(name="sortedOrders")
-	private List<Order> sortedOrders;
-	
-	public void writeOrders(String fileName) {
+	public void writeOrders(String fileName, List<Order> sortedOrders) {
 		
 		Path path = Paths.get(fileName);
 		try (BufferedWriter writer = Files.newBufferedWriter(path)) {
@@ -38,16 +30,17 @@ public class OrdersUtility {
 		}
 	}
 
-	public  void readOrders(String fileName) {	
+	public List<Order> readOrders(String fileName) {
+		List<Order> inputOrders = new ArrayList<>();
 		try (Scanner scanner = new Scanner(new File(fileName))) {
 
 			scanner.nextLine();
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				String[] words = line.split("\\s+");
-				if (words != null && words.length == 2) {
+				if (words.length == 2) {
 					Order order = new Order(words[0], Long.parseLong(words[1]));
-					inputorders.add(order);
+					inputOrders.add(order);
 				}
 			}
 			scanner.close();
@@ -57,7 +50,9 @@ public class OrdersUtility {
 		}
 
 		System.out.println("before sorting");
-		System.out.println(inputorders);
+		System.out.println(inputOrders);
+
+		return inputOrders;
 	}
 	
 }
