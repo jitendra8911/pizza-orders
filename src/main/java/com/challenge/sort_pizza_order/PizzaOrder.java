@@ -44,8 +44,8 @@ public class PizzaOrder {
 	  }
 
 	@Bean
-	CommandLineRunner init(StorageService storageService) {
-		return (args) -> {
+	Runnable init(StorageService storageService) {
+		return () -> {
 			storageService.deleteAll();
 			storageService.init();
 		};
