@@ -29,7 +29,7 @@ public class OrdersUtility {
             ZoneId zone = ZoneId.systemDefault();
             sortedOrders.forEach(order -> {
                 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss").withZone(zone);
-                String dateTime = df.format(Instant.ofEpochMilli(order.getEpoch()));
+                String dateTime = df.format(Instant.ofEpochMilli(order.getEpoch() * 1000));
                 result.append(order.getName()).append(" ");
 				result.append(dateTime).append("\n");
 			});
