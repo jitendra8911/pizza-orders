@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -23,7 +26,13 @@ public class OrdersUtility {
 		try (BufferedWriter writer = Files.newBufferedWriter(path)) {
 			StringBuilder result = new StringBuilder("");
 			result.append("Order time").append("\n");
-			sortedOrders.stream().forEach(order -> result.append(order).append("\n"));
+            ZoneId zone = ZoneId.systemDefault();
+            sortedOrders.forEach(order -> {
+                DateTimeFormatter df = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss").withZone(zone);
+                String dateTime = df.format(Instant.ofEpochMilli(order.getEpoch() * 1000));
+                result.append(order.getName()).append(" ");
+				result.append(dateTime).append("\n");
+			});
 		    writer.write(result.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
