@@ -7,3 +7,7 @@
 5. add "file_src_location" "file_dest_location" as program arguments
 6. Run the application
 7. The final sorted orders are written to output file mentioned in second program argument
+
+#Assumptions made
+1. Sorting is first done by "time" in descending order
+2. After that the list is lexicographically sorted out by "Order"
